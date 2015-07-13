@@ -130,8 +130,10 @@ RCT_EXPORT_METHOD(readFile:(NSString*)filepath callback:(RCTResponseSenderBlock)
   return @{
     @"NSCachesDirectoryPath": [self getPathForDirectory:NSCachesDirectory],
     @"NSDocumentDirectoryPath": [self getPathForDirectory:NSDocumentDirectory],
+    @"NSLibraryDirectoryPath": [self getPathForDirectory:NSLibraryDirectory],
     @"NSCachesDirectory": [NSNumber numberWithInteger:NSCachesDirectory],
     @"NSDocumentDirectory": [NSNumber numberWithInteger:NSDocumentDirectory],
+    @"NSLibraryDirectory": [NSNumber numberWithInteger:NSLibraryDirectory],
     @"MainBundleDirectory": [NSNumber numberWithInteger:MainBundleDirectory],
     @"NSFileTypeRegular": NSFileTypeRegular,
     @"NSFileTypeDirectory": NSFileTypeDirectory
