@@ -9,6 +9,7 @@ var _stat = Promise.promisify(RNFSManager.stat);
 var _readFile = Promise.promisify(RNFSManager.readFile);
 var _writeFile = Promise.promisify(RNFSManager.writeFile);
 var _unlink = Promise.promisify(RNFSManager.unlink);
+var _mkdir = Promise.promisify(RNFSManager.mkdir);
 
 var convertError = (err) => {
   if (err.isOperational) {
@@ -59,6 +60,20 @@ var RNFS = {
 
   writeFile(filepath, contents, options) {
     return _writeFile(filepath, base64.encode(contents), options)
+      .catch(convertError);
+  },
+
+  mkdir(filepath, createIntermediates, attributes) {
+    if (!attributes) {
+      if (typeof createIntermediates === 'object') {
+        attributes = createIntermediates;
+        createIntermediates = true;
+      }
+    }
+    if (typeof createIntermediates !== 'boolean') {
+      createIntermediates = true;
+    }
+    return _mkdir(filepath, createIntermediates, attributes)
       .catch(convertError);
   },
 
