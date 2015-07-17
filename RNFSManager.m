@@ -81,6 +81,21 @@ RCT_EXPORT_METHOD(writeFile:(NSString*)filepath contents:(NSString*)base64Conten
   callback(@[[NSNull null], [NSNumber numberWithBool:success]]);
 }
 
+RCT_EXPORT_METHOD(mkdir:(NSString*)filepath withIntermediateDirectories:(BOOL)createIntermediates attributes:(NSDictionary *)attributes callback:(RCTResponseSenderBlock)callback){
+  NSError *error = nil;
+  BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:filepath withIntermediateDirectories:createIntermediates attributes:attributes error:&error];
+
+  if (!success) {
+    if (error) {
+      return callback([self makeErrorPayload:error]);
+    } else {
+      return callback(@[[NSString stringWithFormat:@"Could not write directory at path %@", filepath]]);
+    }
+  }
+
+  callback(@[[NSNull null], [NSNumber numberWithBool:success]]);
+}
+
 RCT_EXPORT_METHOD(unlink:(NSString*)filepath callback:(RCTResponseSenderBlock)callback) {
   NSFileManager *manager = [NSFileManager defaultManager];
   BOOL exists = [manager fileExistsAtPath:filepath isDirectory:false];
@@ -130,8 +145,10 @@ RCT_EXPORT_METHOD(readFile:(NSString*)filepath callback:(RCTResponseSenderBlock)
   return @{
     @"NSCachesDirectoryPath": [self getPathForDirectory:NSCachesDirectory],
     @"NSDocumentDirectoryPath": [self getPathForDirectory:NSDocumentDirectory],
+    @"NSLibraryDirectoryPath": [self getPathForDirectory:NSLibraryDirectory],
     @"NSCachesDirectory": [NSNumber numberWithInteger:NSCachesDirectory],
     @"NSDocumentDirectory": [NSNumber numberWithInteger:NSDocumentDirectory],
+    @"NSLibraryDirectory": [NSNumber numberWithInteger:NSLibraryDirectory],
     @"MainBundleDirectory": [NSNumber numberWithInteger:MainBundleDirectory],
     @"NSFileTypeRegular": NSFileTypeRegular,
     @"NSFileTypeDirectory": NSFileTypeDirectory
